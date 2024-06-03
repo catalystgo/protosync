@@ -1,7 +1,9 @@
 package main
 
-import "github.com/catalystgo/protosync/cmd"
+import (
+	"github.com/catalystgo/protosync/cmd"
+)
 
 func main() {
-	cmd.Execute()
+	_ = cmd.Execute()
 }
