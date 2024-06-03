@@ -7,10 +7,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	domainAllowedApi = []string{"github", "gitlab", "bitbucket"}
-)
-
 type (
 	Dependency struct {
 		Source string `yaml:"source" json:"source"`
@@ -22,7 +18,7 @@ type (
 	}
 
 	Config struct {
-		OutDir       string       `yaml:"out_dir" json:"out_dir"`
+		OutDir       string       `yaml:"outDir" json:"outDir"`
 		Dependencies []Dependency `yaml:"dependencies" json:"dependencies"`
 		Domains      []Domain     `yaml:"domains" json:"domains"`
 	}
