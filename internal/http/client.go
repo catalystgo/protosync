@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+
+	"github.com/catalystgo/xro-log/log"
 )
 
 type Client struct {
@@ -27,6 +29,8 @@ func (c *Client) Post(url string, body []byte, opts ...func(*http.Request)) ([]b
 	for _, opt := range opts {
 		opt(req)
 	}
+
+	log.Debugf("POST request: %s", url)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
@@ -56,6 +60,8 @@ func (c *Client) Get(url string, opts ...func(*http.Request)) ([]byte, error) {
 	for _, opt := range opts {
 		opt(req)
 	}
+
+	log.Debugf("GET request: %s", url)
 
 	resp, err := c.client.Do(req)
 	if err != nil {
