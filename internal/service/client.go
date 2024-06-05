@@ -1,8 +1,8 @@
 package service
 
 import (
+	_ "embed"
 	"fmt"
-	"os"
 	"path"
 	"sync"
 
@@ -19,37 +19,31 @@ type Downloader interface {
 	GetFile(file *domain.File) ([]byte, error)
 }
 
+type Writer interface {
+	Write(file string, content []byte) error
+}
+
 type Service struct {
-	mu          sync.RWMutex
+	mu sync.RWMutex
+
+	writer      Writer
 	downloaders map[string]Downloader
 }
 
-func New() *Service {
+func New(writer Writer) *Service {
 	return &Service{
+		writer:      writer,
 		downloaders: make(map[string]Downloader),
 	}
 }
 
-func (s *Service) Register(name string, d Downloader) {
+func (s *Service) Register(domain string, d Downloader) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.downloaders[name] = d
-}
-
-func (s *Service) DownloadAll(outDir string, files ...string) error {
-	for _, file := range files {
-		err := s.Download(file, outDir)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+	s.downloaders[domain] = d
 }
 
 func (s *Service) Download(file string, outDir string) error {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-
 	f, err := domain.ParseFile(file)
 	if err != nil {
 		return err
@@ -57,7 +51,10 @@ func (s *Service) Download(file string, outDir string) error {
 
 	// Get downloader by domain
 
+	s.mu.RLock()
 	d, ok := s.downloaders[f.Domain]
+	s.mu.RUnlock()
+
 	if !ok {
 		return ErrorInvalidFile(file, "unknown domain")
 	}
@@ -69,27 +66,27 @@ func (s *Service) Download(file string, outDir string) error {
 		return err
 	}
 
-	// Create output file and write content
+	// Write file content
 
-	outPath := path.Join(outDir, f.Domain, f.Path)
-
-	// Create output directory if not exists
-	err = os.MkdirAll(path.Dir(outPath), os.ModePerm)
-	if err != nil {
-		return err
-	}
-
-	outFile, err := os.Create(outPath)
-	if err != nil {
-		return err
-	}
-
-	defer func() { _ = outFile.Close() }()
-
-	_, err = outFile.Write(content)
+	outPath := path.Join(outDir, f.Domain, f.User, f.Repo, f.Path)
+	err = s.writer.Write(outPath, content)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+var (
+	//go:embed template/proto-sync.yml
+	configContent string
+
+	configName = "proto-sync.yml"
+	configPath = path.Join(".", configName)
+)
+
+// GenConfig generates a default configuration file
+// for the protosync tool in the current directory
+func (s *Service) GenConfig() error {
+	return s.writer.Write(configPath, []byte(configContent))
 }
