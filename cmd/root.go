@@ -8,10 +8,14 @@ import (
 	"github.com/catalystgo/protosync/internal/downloader"
 	"github.com/catalystgo/protosync/internal/http"
 	"github.com/catalystgo/protosync/internal/service"
+	"github.com/catalystgo/xro-log/log"
 	"github.com/spf13/cobra"
 )
 
-var configPath string
+var (
+	configPath string
+	verbose    bool
+)
 
 var (
 	httpClient = http.NewClient()
@@ -22,9 +26,13 @@ var (
 	gitlabClient    = downloader.NewGitlab(httpClient)
 	bitbucketClient = downloader.NewBitbucket(httpClient)
 
+	// Writer
+
+	writer = service.NewWriteProvider()
+
 	// Services
 
-	svc = service.New()
+	svc = service.New(writer)
 )
 
 var (
@@ -38,6 +46,10 @@ var (
 			c, err := config.Load(configPath)
 			if err != nil {
 				return err
+			}
+
+			if verbose {
+				log.SetLevel(log.LevelDebug)
 			}
 
 			// Register downloaders for each external domain
@@ -63,6 +75,7 @@ var (
 
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&configPath, "config-file", "f", "proto-sync.yml", "config file")
+	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 
 	svc.Register(domain.DefaultDomainGithub, githubClient)
 	svc.Register(domain.DefaultDomainGitlab, gitlabClient)
