@@ -17,5 +17,12 @@ func NewBitbucket(httpClient httpClient) *Bitbucket {
 }
 
 func (b *Bitbucket) GetFile(f *domain.File) ([]byte, error) {
-	return nil, fmt.Errorf("bitbucket client not implemented")
+	return getFile(b.client, b.getUrl(f), f)
+}
+
+// getUrl returns the URL for the file
+func (b *Bitbucket) getUrl(f *domain.File) string {
+	return fmt.Sprintf("https://%s/%s/%s/raw/%s/%s",
+		f.Domain, f.User, f.Repo, f.Ref, f.Path,
+	)
 }
