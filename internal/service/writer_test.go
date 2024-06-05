@@ -9,6 +9,8 @@ import (
 )
 
 func TestProviderWrite(t *testing.T) {
+	t.Parallel()
+
 	// Create a temporary directory
 	dir := t.TempDir()
 

@@ -45,6 +45,10 @@ func ParseFile(file string) (*File, error) {
 	}
 
 	// Get the files's path
+	// Example:
+	// - github.com/catalystgo/protosync/internal/domain/file.go => internal/domain/file.go
+	// - gitlab.com/catalystgo/protosync/internal/domain/file.go => internal/domain/file.go
+	// - bitbucket.org/catalystgo/protosync/internal/domain/file.go => internal/domain/file.go
 	path := file[slashIdx+1 : atIdx]
 
 	if path == "" {
@@ -58,7 +62,7 @@ func ParseFile(file string) (*File, error) {
 
 	user := pathParts[0]
 	repo := pathParts[1]
-	path = strings.Join(pathParts[2:], "/")
+	path = strings.Join(pathParts[2:], "/") // Full file path under the repo
 
 	if user == "" {
 		return nil, ErrInvalidFile(file, "user is empty")

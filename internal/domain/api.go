@@ -11,7 +11,7 @@ const (
 )
 
 var (
-	AllowedDomainsAPI = [...]string{"github.com", "gitlab.com", "bitbucket.com"}
+	AllowedDomainsAPI = [...]string{DefaultDomainGithub, DefaultDomainGitlab, DefaultDomainBitbucket}
 )
 
 func IsDomainAPIValid(domain string) bool {

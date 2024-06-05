@@ -11,6 +11,8 @@ import (
 )
 
 func TestService(t *testing.T) {
+	t.Parallel()
+
 	var (
 		defaulContent  = []byte(`hello world`)
 		defaultOutDir  = "proto"

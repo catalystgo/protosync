@@ -11,6 +11,8 @@ import (
 )
 
 func TestGithub(t *testing.T) {
+	t.Parallel()
+
 	errDummy := fmt.Errorf("dummy error")
 
 	testCases := []struct {
@@ -56,7 +58,11 @@ func TestGithub(t *testing.T) {
 	}
 
 	for _, tc := range testCases {
+		tc := tc
+
 		t.Run(tc.name, func(t *testing.T) {
+			t.Parallel()
+
 			ctrl := gomock.NewController(t)
 
 			httpClient := mock.NewMockhttpClient(ctrl)

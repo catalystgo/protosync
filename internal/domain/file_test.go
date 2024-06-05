@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -17,21 +16,6 @@ func TestParseFile(t *testing.T) {
 		fileObj *File
 	}{
 		{
-			name:   "empty file",
-			file:   "",
-			errMsg: "invalid source format:  => missing domain",
-		},
-		{
-			name:   "invalid file format (ref missing)",
-			file:   "github.com/catalystgo/protosync/server.proto",
-			errMsg: "invalid source format: github.com/catalystgo/protosync/server.proto => missing ref",
-		},
-		{
-			name:   "invalid file format (extension not .proto)",
-			file:   "github.com/catalystgo/protosync/server.txt@master",
-			errMsg: "invalid source format: github.com/catalystgo/protosync/server.txt@master => only .proto extension is allowed",
-		},
-		{
 			name:   "valid file format",
 			file:   "github.com/catalystgo/protosync/server.proto@master",
 			errMsg: "",
@@ -43,12 +27,64 @@ func TestParseFile(t *testing.T) {
 				Ref:    "master",
 			},
 		},
+		{
+			name:   "invalid file format (domain missing)",
+			file:   "",
+			errMsg: "invalid source format:  => missing domain",
+		},
+		{
+			name:   "invalid file format (domain empty)",
+			file:   "/catalystgo/protosync/server.proto@master",
+			errMsg: "invalid source format: /catalystgo/protosync/server.proto@master => domain is empty",
+		},
+		{
+			name:   "invalid file format (ref missing)",
+			file:   "github.com/catalystgo/protosync/server.proto",
+			errMsg: "invalid source format: github.com/catalystgo/protosync/server.proto => missing ref",
+		},
+		{
+			name:   "invalid file format (ref empty)",
+			file:   "github.com/catalystgo/protosync/server.proto@",
+			errMsg: "invalid source format: github.com/catalystgo/protosync/server.proto@ => ref is empty",
+		},
+		{
+			name:   "invalid file format (path missing)",
+			file:   "github.com/@master",
+			errMsg: "invalid source format: github.com/@master => path is empty",
+		},
+		{
+			name:   "invalid file format (path invalid)", // repo is missing
+			file:   "github.com/catalystgo/server.proto@master",
+			errMsg: "invalid source format: github.com/catalystgo/server.proto@master => path is invalid",
+		},
+		{
+			name:   "invalid file format (user is empty)",
+			file:   "github.com//protosync/server.proto@master",
+			errMsg: "invalid source format: github.com//protosync/server.proto@master => user is empty",
+		},
+		{
+			name:   "invalid file format (repo is empty)",
+			file:   "github.com/catalystgo//server.proto@master",
+			errMsg: "invalid source format: github.com/catalystgo//server.proto@master => repo is empty",
+		},
+		{
+			name:   "invalid file format (not proto file)",
+			file:   "github.com/catalystgo/protosync/server.go@master",
+			errMsg: "invalid source format: github.com/catalystgo/protosync/server.go@master => only .proto extension is allowed",
+		},
+		{
+			name:   "invalid file format (extension not .proto)",
+			file:   "github.com/catalystgo/protosync/server.txt@master",
+			errMsg: "invalid source format: github.com/catalystgo/protosync/server.txt@master => only .proto extension is allowed",
+		},
 	}
 
 	for _, tt := range tests {
 		tt := tt
 
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			f, err := ParseFile(tt.file)
 			if tt.errMsg != "" {
 				require.Error(t, err)
@@ -57,7 +93,7 @@ func TestParseFile(t *testing.T) {
 			}
 
 			require.NoError(t, err)
-			require.True(t, reflect.DeepEqual(f, tt.fileObj))
+			require.Equal(t, *f, *tt.fileObj)
 		})
 	}
 }
