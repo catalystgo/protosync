@@ -17,11 +17,11 @@ func NewBitbucket(httpClient httpClient) *Bitbucket {
 }
 
 func (b *Bitbucket) GetFile(f *domain.File) ([]byte, error) {
-	return getFile(b.client, b.getUrl(f), f)
+	return getFile(b.client, b.getURL(f), f)
 }
 
-// getUrl returns the URL for the file
-func (b *Bitbucket) getUrl(f *domain.File) string {
+// getURL returns the URL for the file
+func (b *Bitbucket) getURL(f *domain.File) string {
 	return fmt.Sprintf("https://%s/%s/%s/raw/%s/%s",
 		f.Domain, f.User, f.Repo, f.Ref, f.Path,
 	)

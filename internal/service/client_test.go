@@ -56,7 +56,7 @@ func TestService(t *testing.T) {
 			file:    defaultFileURL,
 			ourDir:  defaultOutDir,
 			content: defaulContent,
-			prepare: func(w *mock.MockWriter, d *mock.MockDownloader) {
+			prepare: func(_ *mock.MockWriter, d *mock.MockDownloader) {
 				d.EXPECT().GetFile(defaultFile).Return(nil, errDummy)
 			},
 			check: func(t *testing.T, err error) {

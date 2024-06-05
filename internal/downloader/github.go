@@ -17,11 +17,11 @@ func NewGithub(httpClient httpClient) *Github {
 }
 
 func (g *Github) GetFile(f *domain.File) ([]byte, error) {
-	return getFile(g.client, g.getUrl(f), f)
+	return getFile(g.client, g.getURL(f), f)
 }
 
-// getUrl returns the URL for the file
-func (g *Github) getUrl(f *domain.File) string {
+// getURL returns the URL for the file
+func (g *Github) getURL(f *domain.File) string {
 	return fmt.Sprintf("https://%s/%s/%s/blob/%s/%s?raw=true",
 		f.Domain, f.User, f.Repo, f.Ref, f.Path,
 	)

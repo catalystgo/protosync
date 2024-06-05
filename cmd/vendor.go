@@ -10,7 +10,7 @@ var (
 		Use:   "vendor",
 		Short: "Download proto files from a remote repository",
 		Long:  `Download proto files from a remote repository`,
-		RunE: func(cmd *cobra.Command, args []string) error {
+		RunE: func(_ *cobra.Command, _ []string) error {
 			c := config.Get()
 
 			for _, d := range c.Dependencies {

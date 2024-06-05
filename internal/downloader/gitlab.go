@@ -18,11 +18,11 @@ func NewGitlab(httpClient httpClient) *Gitlab {
 
 // GetFile downloads the file from the Gitlab repository
 func (g *Gitlab) GetFile(f *domain.File) ([]byte, error) {
-	return getFile(g.client, g.getUrl(f), f)
+	return getFile(g.client, g.getURL(f), f)
 }
 
-// getUrl returns the URL for the file
-func (g *Gitlab) getUrl(f *domain.File) string {
+// getURL returns the URL for the file
+func (g *Gitlab) getURL(f *domain.File) string {
 	return fmt.Sprintf("https://%s/%s/%s/-/raw/%s/%s",
 		f.Domain, f.User, f.Repo, f.Ref, f.Path,
 	)

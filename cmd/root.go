@@ -41,7 +41,7 @@ var (
 		Short:        "protosync is a tool to sync proto files from a remote repository",
 		Long:         `protosync is a tool to sync proto files from a remote repository`,
 		SilenceUsage: true,
-		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+		PersistentPreRunE: func(_ *cobra.Command, _ []string) error {
 			// Load config file
 			c, err := config.Load(configPath)
 			if err != nil {
@@ -54,7 +54,7 @@ var (
 
 			// Register downloaders for each external domain
 			for _, d := range c.Domains {
-				apiDomain := domain.GetAPIDomain(d.Api)
+				apiDomain := domain.GetAPIDomain(d.API)
 
 				switch apiDomain {
 				case domain.DefaultDomainGithub:

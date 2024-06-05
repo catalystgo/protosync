@@ -18,7 +18,7 @@ func TestGitlab(t *testing.T) {
 	testCases := []struct {
 		name    string
 		file    *domain.File
-		prepare func(t *testing.T, c *mock.MockhttpClient)
+		prepare func(c *mock.MockhttpClient)
 		check   func(t *testing.T, content []byte, err error)
 	}{
 		{
@@ -30,7 +30,7 @@ func TestGitlab(t *testing.T) {
 				Path:   "path/to/file/hello.proto",
 				Ref:    "08c4336",
 			},
-			prepare: func(t *testing.T, c *mock.MockhttpClient) {
+			prepare: func(c *mock.MockhttpClient) {
 				c.EXPECT().Get("https://gitlab.com/user/repo/-/raw/08c4336/path/to/file/hello.proto").Return([]byte("hello"), nil)
 			},
 			check: func(t *testing.T, content []byte, err error) {
@@ -47,7 +47,7 @@ func TestGitlab(t *testing.T) {
 				Path:   "path/to/file/hello.proto",
 				Ref:    "master",
 			},
-			prepare: func(t *testing.T, c *mock.MockhttpClient) {
+			prepare: func(c *mock.MockhttpClient) {
 				c.EXPECT().Get("https://gitlab.com/user/repo/-/raw/master/path/to/file/hello.proto").Return(nil, errDummy)
 			},
 			check: func(t *testing.T, content []byte, err error) {
@@ -62,11 +62,11 @@ func TestGitlab(t *testing.T) {
 
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
-		
+
 			ctrl := gomock.NewController(t)
 
 			httpClient := mock.NewMockhttpClient(ctrl)
-			tc.prepare(t, httpClient)
+			tc.prepare(httpClient)
 
 			d := NewGitlab(httpClient)
 			content, err := d.GetFile(tc.file)

@@ -14,7 +14,7 @@ type (
 
 	Domain struct {
 		Domain string `yaml:"domain" json:"domain"`
-		Api    string `yaml:"api" json:"api"`
+		API    string `yaml:"api" json:"api"`
 	}
 
 	Config struct {
