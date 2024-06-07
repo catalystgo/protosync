@@ -1,8 +1,8 @@
 version: '3'
 
 vars:
-  # GENERAL
-  GOBIN: ./bin
+  GOBIN: "$(pwd)/bin"
+  DOCKER_IMAGE: "catalystgo/protosync"
 
 tasks:
   build:
@@ -15,11 +15,12 @@ tasks:
 
   run:
     cmds:
-      - go run ./cmd/.
+      - bin/protosync vendor
 
   mock:
     cmds:
-      - echo "mocking!"
+      - "{{.GOBIN}}/mockgen -source=internal/downloader/client.go -destination=internal/downloader/mock/client.go -package=mock"
+      - "{{.GOBIN}}/mockgen -source=internal/service/client.go -destination=internal/service/mock/client.go -package=mock"
 
   format:
     cmds:
@@ -29,38 +30,55 @@ tasks:
         vars: { COMMAND: '{{.GOBIN}}/goimports -w  {} +'}
 
   test:
+    desc: "Run all tests and generate coverage report (excludes some packages)"
     cmds:
-      - go test -v -race -cover ./...
+      - go test -cover -json -coverprofile=coverage.out 
+        $(go list ./... | grep -Ewv "(mock$|cmd$)") | {{.GOBIN}}/gotestfmt
 
   lint:
+    desc: "Run revive linter"
     cmds:
       - "{{.GOBIN}}/revive
         -config revive.toml
         -formatter friendly
-        -exclude ./mock
+        -exclude ./**/mock
         ./..."
 
-  deps:
+  pre-commit:
+    desc: "Run all pre-commit tasks"
     cmds:
-      - |
-        export GOBIN="$(pwd)/bin"
+      - task: format
+      - task: lint
+      - task: test
 
-        # GRPC
+  deps:
+    desc: "Install all dependencies"
+    cmds:
+      - GOBIN={{.GOBIN}} go install golang.org/x/tools/cmd/goimports@v0.19.0
+      - GOBIN={{.GOBIN}} go install github.com/mgechev/revive@v1.3.7
+      - GOBIN={{.GOBIN}} go install github.com/golang/mock/mockgen@v1.6.0
+      - GOBIN={{.GOBIN}} go install github.com/google/yamlfmt/cmd/yamlfmt@v0.12.1
+      - GOBIN={{.GOBIN}} go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@v2.5.0
 
-        go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.16.0
-        go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.16.0
-        go install github.com/planetscale/vtprotobuf/cmd/protoc-gen-go-vtproto@v0.6.0
-        go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
-        go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
-        go install github.com/bufbuild/buf/cmd/buf@v1.31.0
+## DOCKER
 
-        # OTHERS
+  docker-build:
+    cmds:
+      - docker build -t {{.DOCKER_IMAGE}}:{{.VERSION}} . 
+        --build-arg VERSION={{.VERSION}}
+        --build-arg COMMIT=$(git rev-parse --short HEAD)
+        --build-arg DATE=$(date -u +'%Y-%m-%d')
+        --build-arg BUILD_PATH=$(go list -m)/internal/build
+        --no-cache
 
-        go install golang.org/x/tools/cmd/goimports@v0.19.0
-        go install github.com/mgechev/revive@v1.3.7
+  docker-push:
+    cmds:
+      - docker push {{.DOCKER_IMAGE}}:${VERSION}
 
-        # Uncomment to use pre-commit hooks (pip must be installed)
-        # pip install pre-commit
+  docker-release:
+    cmds:
+      - task: docker-build
+      - task: docker-push
 
 ## INTERNAL COMMANDS
 
