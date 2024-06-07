@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/catalystgo/protosync/internal/config"
 	"github.com/catalystgo/protosync/internal/domain"
 	"github.com/catalystgo/protosync/internal/downloader"
@@ -41,20 +39,33 @@ var (
 		Short:        "protosync is a tool to sync proto files from a remote repository",
 		Long:         `protosync is a tool to sync proto files from a remote repository`,
 		SilenceUsage: true,
-		PersistentPreRunE: func(_ *cobra.Command, _ []string) error {
-			// Load config file
-			c, err := config.Load(configPath)
-			if err != nil {
-				return err
-			}
-
+		PersistentPreRun: func(cmd *cobra.Command, _ []string) {
 			if verbose {
 				log.SetLevel(log.LevelDebug)
 			}
 
+			// Skip loading config if the command is not vendor
+			// since vendor command is the only command that requires config
+			if cmd.Name() != vendorCmd.Name() {
+				return
+			}
+
+			log.Debugf("pre run on command: %s", cmd.CommandPath())
+			log.Debug("loading config")
+
+			// Load config file
+			c, err := config.Load(configPath)
+			if err != nil {
+				log.Fatalf("load config: %v", err)
+			}
+
+			log.Debug("config loaded")
+
 			// Register downloaders for each external domain
 			for _, d := range c.Domains {
 				apiDomain := domain.GetAPIDomain(d.API)
+
+				log.Debugf("registering downloader for domain %s with api %s", d.Domain, apiDomain)
 
 				switch apiDomain {
 				case domain.DefaultDomainGithub:
@@ -64,17 +75,15 @@ var (
 				case domain.DefaultDomainBitbucket:
 					svc.Register(d.Domain, bitbucketClient)
 				default:
-					return fmt.Errorf("missing downloader for domain %s", d.Domain)
+					log.Fatalf("missing downloader for domain %s", d.Domain)
 				}
 			}
-
-			return nil
 		},
 	}
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&configPath, "config-file", "f", "proto-sync.yml", "config file")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "config-file", "f", "protosync.yml", "config file")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
 
 	svc.Register(domain.DefaultDomainGithub, githubClient)
