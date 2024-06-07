@@ -10,8 +10,11 @@ import (
 )
 
 var (
-	ErrorInvalidFile = func(file string, message string) error {
+	ErrInvalidFile = func(file string, message string) error {
 		return fmt.Errorf("invalid file format: %s => %s", file, message)
+	}
+	ErrInvalidOutput = func(output string) error {
+		return fmt.Errorf("invalid output type: %s", output)
 	}
 )
 
@@ -56,7 +59,7 @@ func (s *Service) Download(file string, outDir string) error {
 	s.mu.RUnlock()
 
 	if !ok {
-		return ErrorInvalidFile(file, "unknown domain")
+		return ErrInvalidFile(file, "unknown domain")
 	}
 
 	// Download file content
@@ -78,15 +81,35 @@ func (s *Service) Download(file string, outDir string) error {
 }
 
 var (
-	//go:embed template/proto-sync.yml
+	//go:embed template/protosync.yml
 	configContent string
 
-	configName = "proto-sync.yml"
+	configName = "protosync.yml"
 	configPath = path.Join(".", configName)
 )
 
 // GenConfig generates a default configuration file
 // for the protosync tool in the current directory
-func (s *Service) GenConfig() error {
-	return s.writer.Write(configPath, []byte(configContent))
+func (s *Service) GenConfig(configFile string) error {
+	if configFile == "" {
+		configFile = configPath
+	}
+	return s.writer.Write(configFile, []byte(configContent))
+}
+
+func (s *Service) PrintVersion(version string, commit string, date string, outputType string) error {
+	switch outputType {
+	case "json":
+		fmt.Printf(`{
+	"version": "%s",
+	"commit": "%s",
+	"date": "%s"
+}
+`, version, commit, date)
+	case "yaml", "yml", "":
+		fmt.Printf("version: %s\ncommit: %s\ndate: %s\n", version, commit, date)
+	default:
+		return ErrInvalidOutput(outputType)
+	}
+	return nil
 }

@@ -15,7 +15,7 @@ func validate() error {
 	if cfg.OutDir == "" {
 		return ErrOutDirEmpty
 	}
-	
+
 	if err := validateDomain(cfg.Domains, configDomains); err != nil {
 		return err
 	}
