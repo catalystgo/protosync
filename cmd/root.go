@@ -13,7 +13,6 @@ import (
 var (
 	configPath string
 	verbose    bool
-	outputDir  string
 )
 
 var (
@@ -82,7 +81,6 @@ var (
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&configPath, "file", "f", "protosync.yml", "config file")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringVarP(&outputDir, "output", "o", "", "output directory path")
 
 	svc.Register(domain.DefaultDomainGithub, githubClient)
 	svc.Register(domain.DefaultDomainGitlab, gitlabClient)

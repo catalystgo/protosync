@@ -7,6 +7,10 @@ import (
 )
 
 var (
+	outputDir string
+)
+
+var (
 	vendorCmd = &cobra.Command{
 		Use:     "vendor",
 		Short:   "Download proto files from a remote repository",
@@ -25,4 +29,6 @@ var (
 
 func init() {
 	rootCmd.AddCommand(vendorCmd)
+
+	vendorCmd.PersistentFlags().StringVarP(&outputDir, "output", "o", "", "output directory path")
 }
