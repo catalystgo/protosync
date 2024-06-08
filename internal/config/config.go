@@ -1,6 +1,7 @@
 package config
 
 import (
+	"path"
 	"reflect"
 	"sync"
 
@@ -37,7 +38,7 @@ func Get() *Config {
 	return &cfg
 }
 
-func Load(configPath string) (_ *Config, err error) {
+func Load(configPath string, outputDir string) (_ *Config, err error) {
 	loadOnce.Do(func() { err = load(configPath) })
 
 	if err != nil {
@@ -48,6 +49,14 @@ func Load(configPath string) (_ *Config, err error) {
 	if isConfigEmpty() {
 		return nil, ErrConfigEmpty
 	}
+
+	// If outputDir is empty, set it to the directory of the config file
+	if outputDir == "" {
+		outputDir = path.Dir(configPath)
+	}
+
+	// Set absolute path
+	cfg.OutDir = path.Join(outputDir, cfg.OutDir)
 
 	return &cfg, nil
 }

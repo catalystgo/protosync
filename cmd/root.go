@@ -13,6 +13,7 @@ import (
 var (
 	configPath string
 	verbose    bool
+	outputDir  string
 )
 
 var (
@@ -54,12 +55,13 @@ var (
 			log.Debug("loading config")
 
 			// Load config file
-			c, err := config.Load(configPath)
+			c, err := config.Load(configPath, outputDir)
 			if err != nil {
 				log.Fatalf("load config: %v", err)
 			}
 
 			log.Debug("config loaded")
+			log.Debugf("config output directory: %s", c.OutDir)
 
 			// Register downloaders for each external domain
 			for _, d := range c.Domains {
@@ -83,8 +85,9 @@ var (
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&configPath, "config-file", "f", "protosync.yml", "config file")
+	rootCmd.PersistentFlags().StringVarP(&configPath, "file", "f", "protosync.yml", "config file")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "verbose output")
+	rootCmd.PersistentFlags().StringVarP(&outputDir, "output", "o", "", "output directory path")
 
 	svc.Register(domain.DefaultDomainGithub, githubClient)
 	svc.Register(domain.DefaultDomainGitlab, gitlabClient)

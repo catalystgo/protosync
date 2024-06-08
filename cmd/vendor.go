@@ -8,15 +8,15 @@ import (
 
 var (
 	vendorCmd = &cobra.Command{
-		Use:   "vendor",
-		Short: "Download proto files from a remote repository",
-		Long:  `Download proto files from a remote repository`,
+		Use:     "vendor",
+		Short:   "Download proto files from a remote repository",
+		Long:    `Download proto files from a remote repository`,
+		Aliases: []string{"ven"},
 		Run: func(_ *cobra.Command, _ []string) {
 			c := config.Get()
-
 			for _, d := range c.Dependencies {
 				if err := svc.Download(d.Source, c.OutDir); err != nil {
-					log.Fatalf("download %s => %v", d.Source, err)
+					log.Warnf("download %s => %v", d.Source, err)
 				}
 			}
 		},
