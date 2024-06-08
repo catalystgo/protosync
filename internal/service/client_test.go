@@ -43,7 +43,6 @@ func TestService(t *testing.T) {
 			ourDir:  defaultOutDir,
 			content: defaulContent,
 			prepare: func(w *mock.MockWriter, d *mock.MockDownloader) {
-
 				w.EXPECT().Write("proto/github.com/catalystgo/protosync/proto/hello.proto", defaulContent).Return(nil)
 				d.EXPECT().GetFile(defaultFile).Return(defaulContent, nil)
 			},

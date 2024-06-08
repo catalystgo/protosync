@@ -1,4 +1,4 @@
-outDir: "./vendor.proto"
+outDir: "vendor.proto"
 
 dependencies:
   # External services

@@ -97,8 +97,8 @@ func (s *Service) GenConfig(configFile string) error {
 	return s.writer.Write(configFile, []byte(configContent))
 }
 
-func (s *Service) PrintVersion(version string, commit string, date string, outputType string) error {
-	switch outputType {
+func (s *Service) PrintVersion(version string, commit string, date string, formatType string) error {
+	switch formatType {
 	case "json":
 		fmt.Printf(`{
 	"version": "%s",
@@ -106,10 +106,10 @@ func (s *Service) PrintVersion(version string, commit string, date string, outpu
 	"date": "%s"
 }
 `, version, commit, date)
-	case "yaml", "yml", "":
+	case "yaml", "yml", "", "text":
 		fmt.Printf("version: %s\ncommit: %s\ndate: %s\n", version, commit, date)
 	default:
-		return ErrInvalidOutput(outputType)
+		return ErrInvalidOutput(formatType)
 	}
 	return nil
 }

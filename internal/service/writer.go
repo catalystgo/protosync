@@ -3,6 +3,8 @@ package service
 import (
 	"os"
 	"path"
+
+	"github.com/catalystgo/xro-log/log"
 )
 
 type WriteProvider struct{}
@@ -16,6 +18,10 @@ func (p *WriteProvider) Write(file string, content []byte) error {
 	err := os.MkdirAll(path.Dir(file), os.ModePerm)
 	if err != nil {
 		return err
+	}
+
+	if _, err := os.Stat(file); err == nil {
+		log.Warnf("overwriting existing file: %s", file)
 	}
 
 	// Create the file
