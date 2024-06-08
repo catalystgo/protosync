@@ -6,15 +6,13 @@ ARG DATE=0000-00-00
 ARG BUILD_PATH=.
 
 RUN echo "Version: ${VERSION}" 
-RUN echo "Commit: ${COMMIT}"
-RUN echo "Date: ${DATE}"
 RUN echo "BuildPath: ${BUILD_PATH}"
 
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o bin/protosync -ldflags "-X ${BUILD_PATH}.Version=${VERSION} -X ${BUILD_PATH}.Commit=${COMMIT} -X ${BUILD_PATH}.Date=${DATE}" main.go 
+RUN go build -o bin/protosync -ldflags "-X ${BUILD_PATH}.Version=${VERSION}" main.go 
 
 FROM alpine:3.20.0 AS final
 

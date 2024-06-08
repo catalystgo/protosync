@@ -7,7 +7,9 @@ vars:
 tasks:
   build:
     cmds:
-      - go build -o bin/protosync main.go
+      - go build -o bin/protosync -ldflags="-X github/catalystgo/protosync/internal/build.Version={{.VERSION}}" main.go
+    vars:
+      VERSION: "$(git describe --tags --always --dirty)"
 
   release:
     cmds:
@@ -73,7 +75,7 @@ tasks:
 
   docker-push:
     cmds:
-      - docker push {{.DOCKER_IMAGE}}:${VERSION}
+      - docker push {{.DOCKER_IMAGE}}:{{.VERSION}}
 
   docker-release:
     cmds:
