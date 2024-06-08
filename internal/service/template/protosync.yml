@@ -1,9 +1,6 @@
 outDir: "vendor.proto"
 
 dependencies:
-  # External services
-  - source: github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
-
   # Google protobuf
   - source: github.com/protocolbuffers/protobuf/src/google/protobuf/descriptor.proto@a978b75
   - source: github.com/protocolbuffers/protobuf/src/google/protobuf/empty.proto@a978b75
