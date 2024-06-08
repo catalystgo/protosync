@@ -12,7 +12,7 @@ var (
 		Short:   "Validate the configuration file",
 		Long:    "Validate the configuration file",
 		Aliases: []string{"val"},
-		Run: func(cmd *cobra.Command, _ []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			if _, err := config.Load(configPath, outputDir); err != nil {
 				log.Fatalf("validate configuration file: %v", err)
 			}

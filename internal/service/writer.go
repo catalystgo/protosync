@@ -21,7 +21,7 @@ func (p *WriteProvider) Write(file string, content []byte) error {
 	}
 
 	if _, err := os.Stat(file); err == nil {
-		log.Warnf("overwriting existing file: %s", file)
+		log.Debugf("overwriting existing file: %s", file)
 	}
 
 	// Create the file
@@ -37,6 +37,8 @@ func (p *WriteProvider) Write(file string, content []byte) error {
 	if err != nil {
 		return err
 	}
+
+	log.Debugf("content written to file: %s", file)
 
 	return nil
 }

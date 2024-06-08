@@ -46,6 +46,13 @@ func (s *Service) Register(domain string, d Downloader) {
 	s.downloaders[domain] = d
 }
 
+func (s *Service) GetDownloader(domain string) (Downloader, bool) {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
+	d, ok := s.downloaders[domain]
+	return d, ok
+}
+
 func (s *Service) Download(file string, outDir string) error {
 	f, err := domain.ParseFile(file)
 	if err != nil {

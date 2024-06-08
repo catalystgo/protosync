@@ -11,7 +11,7 @@ var (
 		Short:   "Generate default configuration file",
 		Long:    "Generate default configuration file",
 		Aliases: []string{"i"},
-		Run: func(cmd *cobra.Command, _ []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			if err := svc.GenConfig(configPath); err != nil {
 				log.Fatalf("generate default configuration file: %v", err)
 			}

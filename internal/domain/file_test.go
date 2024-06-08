@@ -68,11 +68,6 @@ func TestParseFile(t *testing.T) {
 			errMsg: "invalid source format: github.com/catalystgo//server.proto@master => repo is empty",
 		},
 		{
-			name:   "invalid file format (not proto file)",
-			file:   "github.com/catalystgo/protosync/server.go@master",
-			errMsg: "invalid source format: github.com/catalystgo/protosync/server.go@master => only .proto extension is allowed",
-		},
-		{
 			name:   "invalid file format (extension not .proto)",
 			file:   "github.com/catalystgo/protosync/server.txt@master",
 			errMsg: "invalid source format: github.com/catalystgo/protosync/server.txt@master => only .proto extension is allowed",

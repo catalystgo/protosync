@@ -65,20 +65,15 @@ var (
 
 			// Register downloaders for each external domain
 			for _, d := range c.Domains {
-				apiDomain := domain.GetAPIDomain(d.API)
+				downloader, ok := svc.GetDownloader(d.API)
 
-				log.Debugf("registering downloader for domain %s with api %s", d.Domain, apiDomain)
+				log.Debugf("registering downloader for domain %s with api %s", d.Name, d.API)
 
-				switch apiDomain {
-				case domain.DefaultDomainGithub:
-					svc.Register(d.Domain, githubClient)
-				case domain.DefaultDomainGitlab:
-					svc.Register(d.Domain, gitlabClient)
-				case domain.DefaultDomainBitbucket:
-					svc.Register(d.Domain, bitbucketClient)
-				default:
-					log.Fatalf("missing downloader for domain %s", d.Domain)
+				if !ok {
+					log.Fatalf("missing downloader for domain %s", d.Name)
 				}
+
+				svc.Register(d.Name, downloader)
 			}
 		},
 	}

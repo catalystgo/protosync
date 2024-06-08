@@ -33,20 +33,20 @@ func validate() error {
 func validateDomain(domains []Domain, m map[string]struct{}) error {
 	for _, d := range domains {
 		// validate domain Domain
-		if d.Domain == "" {
+		if d.Name == "" {
 			return ErrDomainEmpty
 		}
 
 		// Validate domain API
-		if !domain.IsDomainAPIValid(d.Domain) {
-			return ErrInvalidDomainAPI(d.Domain)
+		if !domain.IsDomainAPIValid(d.API) {
+			return ErrInvalidDomainAPI(d.Name)
 		}
 
 		// Check if domain has been registered before, if so return an error
-		if _, ok := m[d.Domain]; ok {
-			return ErrDomainAlreadyExists(d.Domain)
+		if _, ok := m[d.Name]; ok {
+			return ErrDomainAlreadyExists(d.Name)
 		}
-		m[d.Domain] = struct{}{}
+		m[d.Name] = struct{}{}
 	}
 	return nil
 }
@@ -64,8 +64,8 @@ func validateDependencies(deps []Dependency, configDomains map[string]struct{}) 
 			return err
 		}
 
-		// Check if domain has been registered before or is a valid API domain if not return an error
-		if _, ok := configDomains[f.Domain]; !ok || !domain.IsDomainAPIValid(f.Domain) {
+		// Check if domain has been registered before, if not return an error
+		if _, ok := configDomains[f.Domain]; !ok {
 			return ErrSourceUnregisteredDomain(dep.Source, f.Domain)
 		}
 	}

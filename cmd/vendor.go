@@ -16,7 +16,7 @@ var (
 			c := config.Get()
 			for _, d := range c.Dependencies {
 				if err := svc.Download(d.Source, c.OutDir); err != nil {
-					log.Warnf("download %s => %v", d.Source, err)
+					log.Errorf("download %s => %v", d.Source, err)
 				}
 			}
 		},
