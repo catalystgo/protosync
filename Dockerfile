@@ -1,8 +1,6 @@
 FROM golang:alpine3.20 AS builder
 
 ARG VERSION=0.0.0
-ARG COMMIT=unknown
-ARG DATE=0000-00-00
 ARG BUILD_PATH=.
 
 RUN echo "Version: ${VERSION}" 
