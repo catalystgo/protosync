@@ -2,18 +2,20 @@ syntax = "proto3";
 
 package echo;
 
-// The request message containing the message to echo
-message EchoRequest {
-  string message = 1; // The message to be echoed back
-}
-
-// The response message containing the echoed message
-message EchoResponse {
-  string message = 1; // The echoed message
-}
+option go_package = "github.com/catalystgo/protosync/examples/api/echo-server";
 
 // The service definition
 service EchoService {
   // Echo the message back
   rpc Echo(EchoRequest) returns (EchoResponse);
+}
+
+// The request message containing the user's name
+message EchoRequest {
+  string message = 1;
+}
+
+// The response message containing the greetings
+message EchoResponse {
+  string message = 1;
 }
