@@ -70,6 +70,10 @@ func (c *Client) Get(url string, opts ...func(*http.Request)) ([]byte, error) {
 
 	defer func() { _ = resp.Body.Close() }()
 
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	}
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
