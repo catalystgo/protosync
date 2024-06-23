@@ -125,6 +125,10 @@ protosync vendor -f ./protosync.yml
 protosync vendor --file ./protosync.yml
 ```
 
+```bash
+protosync vendor --file ./protosync.yml --output /tmp
+```
+
 Sync the proto files from the remote repositories to the local directory and save the files in the output directory
 
 So if the `protosync.yml` file has the following `ourDir: vendor.proto` and the output directory is `/tmp` then the files will be saved in `/tmp/vendor.proto/...`
