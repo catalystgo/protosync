@@ -53,7 +53,7 @@ func (s *Service) GetDownloader(domain string) (Downloader, bool) {
 	return d, ok
 }
 
-func (s *Service) Download(file string, outDir string) error {
+func (s *Service) Download(file string, outDirectory string, outPath string) error {
 	f, err := domain.ParseFile(file)
 	if err != nil {
 		return err
@@ -76,9 +76,17 @@ func (s *Service) Download(file string, outDir string) error {
 		return err
 	}
 
+	// Set output path. If not provided, use the default path
+	// based on the file domain, user, repo, and path values
+	// from the file.
+	if outPath == "" {
+		outPath = path.Join(outDirectory, f.Domain, f.User, f.Repo, f.Path)
+	} else {
+		outPath = path.Join(outDirectory, outPath, path.Base(f.Path))
+	}
+
 	// Write file content
 
-	outPath := path.Join(outDir, f.Domain, f.User, f.Repo, f.Path)
 	err = s.writer.Write(outPath, content)
 	if err != nil {
 		return err

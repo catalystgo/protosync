@@ -3,7 +3,7 @@ module github.com/catalystgo/protosync
 go 1.22.0
 
 require (
-	github.com/catalystgo/xro-log v0.0.3
+	github.com/catalystgo/logger v0.0.2
 	github.com/golang/mock v1.6.0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.19.0

@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.com/catalystgo/xro-log/log"
+	"github.com/catalystgo/logger/log"
 )
 
 type WriteProvider struct{}

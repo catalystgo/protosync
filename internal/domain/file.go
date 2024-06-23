@@ -3,6 +3,8 @@ package domain
 import (
 	"fmt"
 	"strings"
+
+	"github.com/catalystgo/logger/log"
 )
 
 var (
@@ -20,6 +22,8 @@ type File struct {
 }
 
 func ParseFile(file string) (*File, error) {
+	log.Debugf("parsing file link: %s", file)
+
 	// Get the files's domain
 	slashIdx := strings.Index(file, "/")
 	if slashIdx == -1 {

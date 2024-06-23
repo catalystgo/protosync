@@ -41,13 +41,34 @@ Here is a sample configuration file
 
 ```yaml
 # The directory where the proto files will be saved
-outDir: "vendor.proto"
+directory: "vendor.proto"
 
 # The list of proto files that need to be synced
 dependencies:
-  # The source URL of the proto file with the commit hash
+  # `source` URL of the proto file with the commit hash
   # Must be in the following format: `domain/user/repo/path/to/file@commit`
   - source: github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
+
+  # `Path` path to download the proto file to (this path is appended to the directory variable)
+  # Example:
+  # - path: "proto/"
+  # - directory: "vendor.proto"
+  # The file will be saved in the `vendor.proto/proto/` directory
+  # If not provided then the file will be saved in the `vendor.proto/{{SOURCE}}` directory
+  # Example:
+  # - path: "" (or not provided)
+  # - directory: "vendor.proto"
+  # - source: github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
+  # The file will be saved in the `vendor.proto/github.com/catalystgo/protosync/example/proto/` directory
+  - path: "proto/"
+    source: github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
+
+  - path: "proto/"
+    # You can also provide multiple sources to be downloaded in the same path.
+    # NOTICE: You can't use `source` & `sources` together.
+    sources:
+      - github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
+      - github.com/catalystgo/protosync/example/proto/echo.proto@54fc94f
 
   # Example for GitLab company repository
   - source: gitlab.company.com/user/repo/path/to/file/echo.proto@abc123
@@ -79,13 +100,25 @@ protosync validate
 ```
 
 ```bash
+protosync validate -f ./protosync.yml 
+```
+
+```bash
 protosync validate --file ./protosync.yml 
+```
+
+```bash
+protosync validate --file ./protosync.json
 ```
 
 Sync the proto files from the remote repositories to the local directory
 
 ```bash
 protosync vendor
+```
+
+```bash
+protosync vendor -f ./protosync.yml
 ```
 
 ```bash
@@ -115,7 +148,7 @@ docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosy
 - [ ] Add goreleaser to the project
 - [ ] Add build and release pipeline (docker/goreleaser), each deploy should create a new release with tag and latest release
 - [ ] Add method/way to use auth tokens for private repos
-- [ ] Add the path option in config to download the files in a specific path under outDir
+- [x] Add the path option in config to download the files in a specific path under outDir
 
 ### Fixes 🛠
 

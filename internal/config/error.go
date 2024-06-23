@@ -8,12 +8,23 @@ import (
 
 var (
 	// Config errors
+	dependencyInvalid = func(idx int) error {
+		return fmt.Errorf("dependency at index: %d is invalid\n\t", idx)
+	}
 
-	ErrConfigEmpty = fmt.Errorf("config is empty")
-	ErrOutDirEmpty = fmt.Errorf("out_dir cannot be empty")
+	ErrConfigEmpty        = fmt.Errorf("config is empty")
+	ErrDirectoryEmpty     = fmt.Errorf("direcotory cannot be empty")
+	ErrPathNotUnderOutDir = func(idx int, p string, outDir string) error {
+		return fmt.Errorf(dependencyInvalid(idx).Error()+"Path (%s) is not under output directory: (%s). DON'T use \"..\" in path variable.", p, outDir)
+	}
 
 	// Source errors
-
+	ErrSourceInvalid = func(idx int, source string, err error) error {
+		return fmt.Errorf(dependencyInvalid(idx).Error()+"source: %s is invalid => %v", source, err)
+	}
+	ErrSourceAndSourcesSet = func(idx int) error {
+		return fmt.Errorf(dependencyInvalid(idx).Error() + "source and sources cannot be set at the same time in dependency")
+	}
 	ErrSourceUnregisteredDomain = func(source string, domain string) error {
 		return fmt.Errorf("unregistered domain: %s for source: %s", domain, source)
 	}

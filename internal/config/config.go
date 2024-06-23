@@ -2,7 +2,6 @@ package config
 
 import (
 	"path"
-	"reflect"
 	"sync"
 
 	"github.com/spf13/viper"
@@ -10,18 +9,23 @@ import (
 
 type (
 	Dependency struct {
-		Source string `yaml:"source" json:"source"`
+		Path string `yaml:"path" json:"path"`
+
+		Source  string   `yaml:"source" json:"source"`
+		Sources []string `yaml:"sources" json:"sources"`
 	}
 
 	Domain struct {
-		Name string `yaml:"name" json:"name"`
+		Host string `yaml:"host" json:"host"`
 		API  string `yaml:"api" json:"api"`
 	}
 
 	Config struct {
-		OutDir       string       `yaml:"outDir" json:"outDir"`
-		Dependencies []Dependency `yaml:"dependencies" json:"dependencies"`
-		Domains      []Domain     `yaml:"domains" json:"domains"`
+		absOutDir string // absolute path of the output directory
+
+		Directory    string        `yaml:"directory" json:"directory"`
+		Dependencies []*Dependency `yaml:"dependencies" json:"dependencies"`
+		Domains      []*Domain     `yaml:"domains" json:"domains"`
 	}
 )
 
@@ -30,38 +34,17 @@ var (
 	loadOnce sync.Once
 )
 
-func Get() *Config {
-	if isConfigEmpty() {
-		return nil
-	}
-
-	return &cfg
-}
-
 func Load(configPath string, outputDir string) (_ *Config, err error) {
-	loadOnce.Do(func() { err = load(configPath) })
+	loadOnce.Do(func() { err = load(configPath, outputDir) })
 
 	if err != nil {
 		return nil, err
 	}
 
-	// Check if config is empty
-	if isConfigEmpty() {
-		return nil, ErrConfigEmpty
-	}
-
-	// If outputDir is empty, set it to the directory of the config file
-	if outputDir == "" {
-		outputDir = path.Dir(configPath)
-	}
-
-	// Set absolute path
-	cfg.OutDir = path.Join(outputDir, cfg.OutDir)
-
 	return &cfg, nil
 }
 
-func load(configPath string) error {
+func load(configPath string, outputDir string) error {
 	viper.SetConfigFile(configPath)
 	if err := viper.ReadInConfig(); err != nil {
 		return err
@@ -74,6 +57,8 @@ func load(configPath string) error {
 
 	cfg = config
 
+	completeConfig(configPath, outputDir)
+
 	if err := validate(); err != nil {
 		return err
 	}
@@ -81,6 +66,12 @@ func load(configPath string) error {
 	return nil
 }
 
-func isConfigEmpty() bool {
-	return reflect.DeepEqual(cfg, Config{})
+func completeConfig(configPath string, outputDir string) {
+	// If outputDir is empty, set it to the directory of the config file
+	if outputDir == "" {
+		outputDir = path.Dir(configPath)
+	}
+
+	// Set absolute path
+	cfg.absOutDir = path.Join(outputDir, cfg.Directory)
 }

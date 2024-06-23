@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"path"
 
+	"github.com/catalystgo/logger/log"
 	"github.com/catalystgo/protosync/internal/domain"
-	"github.com/catalystgo/xro-log/log"
 )
 
 // func WithAuthToken(token string) func(*http.Request) {

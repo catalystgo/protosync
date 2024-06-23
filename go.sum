@@ -1,5 +1,5 @@
-github.com/catalystgo/xro-log v0.0.3 h1:x2kz2dzAWU1LrGNahuKLrMK5KwSmjH/oKdTZ8xkzqZQ=
-github.com/catalystgo/xro-log v0.0.3/go.mod h1:mxV/PNtpkT/iL1Pgtlv+kC82dvPvUSYoeaem9pHTCrw=
+github.com/catalystgo/logger v0.0.2 h1:ox/UgglNIxAt9fCmLAo+HGdGgxlErZJARVHkcFH2kMI=
+github.com/catalystgo/logger v0.0.2/go.mod h1:bPMHCuB+fhNoPe8saNLcyY0ebAmaWGpbD2khRS49USE=
 github.com/cpuguy83/go-md2man/v2 v2.0.3/go.mod h1:tgQtvFlXSQOSOSIRvRPT7W67SCa46tRHOmNcaadrF8o=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

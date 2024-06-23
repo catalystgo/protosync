@@ -3,7 +3,7 @@ package downloader
 import (
 	"testing"
 
-	"github.com/catalystgo/xro-log/log"
+	"github.com/catalystgo/logger/log"
 )
 
 func TestMain(m *testing.M) {

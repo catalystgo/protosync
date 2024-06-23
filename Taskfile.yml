@@ -15,10 +15,6 @@ tasks:
     cmds:
       - goreleaser release --snapshot --clean
 
-  run:
-    cmds:
-      - bin/protosync vendor
-
   mock:
     cmds:
       - "{{.GOBIN}}/mockgen -source=internal/downloader/client.go -destination=internal/downloader/mock/client.go -package=mock"

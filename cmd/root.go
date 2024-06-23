@@ -1,16 +1,18 @@
 package cmd
 
 import (
+	"github.com/catalystgo/logger/log"
 	"github.com/catalystgo/protosync/internal/config"
 	"github.com/catalystgo/protosync/internal/domain"
 	"github.com/catalystgo/protosync/internal/downloader"
 	"github.com/catalystgo/protosync/internal/http"
 	"github.com/catalystgo/protosync/internal/service"
-	"github.com/catalystgo/xro-log/log"
 	"github.com/spf13/cobra"
 )
 
 var (
+	cfg *config.Config
+
 	configPath string
 	verbose    bool
 )
@@ -51,28 +53,30 @@ var (
 			}
 
 			log.Debugf("pre run on command: %s", cmd.CommandPath())
-			log.Debug("loading config")
+			log.Debugf("loading config file: %s", configPath)
 
 			// Load config file
 			c, err := config.Load(configPath, outputDir)
 			if err != nil {
-				log.Fatalf("load config: %v", err)
+				log.Fatalf("load config: %v\n", err)
 			}
 
 			log.Debug("config loaded")
-			log.Debugf("config output directory: %s", c.OutDir)
+			log.Debugf("config output directory: %s", c.Directory)
+
+			cfg = c // set config to global variable
 
 			// Register downloaders for each external domain
 			for _, d := range c.Domains {
 				downloader, ok := svc.GetDownloader(d.API)
 
-				log.Debugf("registering downloader for domain %s with api %s", d.Name, d.API)
+				log.Debugf("registering downloader for domain %s with api %s", d.Host, d.API)
 
 				if !ok {
-					log.Fatalf("missing downloader for domain %s", d.Name)
+					log.Fatalf("missing downloader for domain %s", d.Host)
 				}
 
-				svc.Register(d.Name, downloader)
+				svc.Register(d.Host, downloader)
 			}
 		},
 	}

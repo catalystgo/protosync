@@ -13,7 +13,7 @@ var (
 		Short:   "Print the version number of protosync",
 		Long:    `Print the version number of protosync`,
 		Aliases: []string{"ver"},
-		Run: func(cmd *cobra.Command, _ []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println(build.Version)
 		},
 	}

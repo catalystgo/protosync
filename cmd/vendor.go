@@ -1,8 +1,7 @@
 package cmd
 
 import (
-	"github.com/catalystgo/protosync/internal/config"
-	"github.com/catalystgo/xro-log/log"
+	"github.com/catalystgo/logger/log"
 	"github.com/spf13/cobra"
 )
 
@@ -17,10 +16,11 @@ var (
 		Long:    `Download proto files from a remote repository`,
 		Aliases: []string{"ven"},
 		Run: func(_ *cobra.Command, _ []string) {
-			c := config.Get()
-			for _, d := range c.Dependencies {
-				if err := svc.Download(d.Source, c.OutDir); err != nil {
-					log.Errorf("download %s => %v", d.Source, err)
+			for _, d := range cfg.Dependencies {
+				for _, f := range d.Sources {
+					if err := svc.Download(f, cfg.Directory, d.Path); err != nil {
+						log.Errorf("download %s => %v", f, err)
+					}
 				}
 			}
 		},
