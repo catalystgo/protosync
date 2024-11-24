@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 )
 
 type Client struct {

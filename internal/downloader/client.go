@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"path"
 
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 	"github.com/catalystgo/protosync/internal/domain"
 )
 

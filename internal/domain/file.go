@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 )
 
 var (

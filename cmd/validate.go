@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 	"github.com/catalystgo/protosync/internal/config"
 	"github.com/spf13/cobra"
 )

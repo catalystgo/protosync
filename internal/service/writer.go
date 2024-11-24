@@ -4,16 +4,18 @@ import (
 	"os"
 	"path"
 
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 )
 
-type WriteProvider struct{}
+type (
+	WriteProvider struct{}
+)
 
 func NewWriteProvider() *WriteProvider {
 	return &WriteProvider{}
 }
 
-func (p *WriteProvider) Write(file string, content []byte) error {
+func (p *WriteProvider) Write(file string, content []byte, overide bool) error {
 	// Create the directory if it doesn't exist
 	err := os.MkdirAll(path.Dir(file), os.ModePerm)
 	if err != nil {
@@ -21,7 +23,11 @@ func (p *WriteProvider) Write(file string, content []byte) error {
 	}
 
 	if _, err := os.Stat(file); err == nil {
-		log.Debugf("overwriting existing file: %s", file)
+		if !overide {
+			log.Warnf("config file [%s] already exists so skipping", file)
+			return nil
+		}
+		log.Debugf("overide existing file: %s", file)
 	}
 
 	// Create the file

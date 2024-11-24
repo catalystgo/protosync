@@ -73,15 +73,15 @@ func (m *MockWriter) EXPECT() *MockWriterMockRecorder {
 }
 
 // Write mocks base method.
-func (m *MockWriter) Write(file string, content []byte) error {
+func (m *MockWriter) Write(file string, content []byte, overide bool) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Write", file, content)
+	ret := m.ctrl.Call(m, "Write", file, content, overide)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Write indicates an expected call of Write.
-func (mr *MockWriterMockRecorder) Write(file, content interface{}) *gomock.Call {
+func (mr *MockWriterMockRecorder) Write(file, content, overide interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockWriter)(nil).Write), file, content)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Write", reflect.TypeOf((*MockWriter)(nil).Write), file, content, overide)
 }

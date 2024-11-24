@@ -2,7 +2,7 @@ directory: "vendor.proto"
 
 dependencies:
   # Example server
-  - source: github.com/catalystgo/protosync/example/proto/echo.proto@120332b
+  # - source: github.com/catalystgo/protosync/example/proto/echo.proto@120332b
 
   # Google protobuf
   - path: google/protobuf

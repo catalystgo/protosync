@@ -3,7 +3,7 @@ package downloader
 import (
 	"testing"
 
-	"github.com/catalystgo/logger/log"
+	log "github.com/catalystgo/logger/cli"
 )
 
 func TestMain(m *testing.M) {

@@ -23,7 +23,7 @@ type Downloader interface {
 }
 
 type Writer interface {
-	Write(file string, content []byte) error
+	Write(file string, content []byte, overide bool) error
 }
 
 type Service struct {
@@ -87,7 +87,7 @@ func (s *Service) Download(file string, outDirectory string, outPath string) err
 
 	// Write file content
 
-	err = s.writer.Write(outPath, content)
+	err = s.writer.Write(outPath, content, true)
 	if err != nil {
 		return err
 	}
@@ -109,5 +109,5 @@ func (s *Service) GenConfig(configFile string) error {
 	if configFile == "" {
 		configFile = configPath
 	}
-	return s.writer.Write(configFile, []byte(configContent))
+	return s.writer.Write(configFile, []byte(configContent), false)
 }

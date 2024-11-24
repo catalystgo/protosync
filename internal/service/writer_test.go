@@ -24,7 +24,7 @@ func TestProviderWrite(t *testing.T) {
 	p := NewWriteProvider()
 
 	// Write the content to the file
-	err := p.Write(file, content)
+	err := p.Write(file, content, true)
 	require.NoError(t, err)
 
 	// Read the file content
