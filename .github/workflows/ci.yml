@@ -1,0 +1,101 @@
+name: ci_pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout_code
+        uses: actions/checkout@v2
+
+      - name: setup_go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.23
+
+      - name: install_dependencies
+        run: |
+          go install github.com/go-task/task/v3/cmd/task@latest
+          task deps
+        shell: bash
+
+
+      - name: run_linter
+        run: task lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout_code
+        uses: actions/checkout@v2
+
+      - name: setup_go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.23
+
+      - name: install_dependencies
+        run: |
+          go install github.com/go-task/task/v3/cmd/task@latest
+          task deps
+        shell: bash
+
+
+      - name: run_tests
+        run: task test
+
+  gorelease:
+    if: github.ref == 'refs/heads/main'
+    needs: [ lint, test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout_code
+        uses: actions/checkout@v2
+
+      - name: setup_go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.23
+
+      - name: go_releaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          distribution: goreleaser
+          version: '~> v2'
+          args: release --clean --snapshot
+        env:
+          GITHUB_TOKEN: ${{ secrets.GO_RELEASE_TOKEN }}
+
+  docker:
+    if: github.ref == 'refs/heads/main'
+    needs: [ lint, test ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout_code
+        uses: actions/checkout@v2
+
+      - name: setup_docker_buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: login_to_docker
+        uses: docker/login-action@v2
+        with:
+          username: catalystgo
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN}}
+
+      - name: build_and_push_docker_image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: |
+            catalystgo/protosync:${{ github.ref_name != 'main' && github.ref_name || 'latest' }}
+          build-args: |
+            VERSION: ${{ github.ref_name != 'main' && github.ref_name || 'latest' }}
