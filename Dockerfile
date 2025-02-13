@@ -1,16 +1,13 @@
 FROM golang:alpine3.20 AS builder
 
-ARG VERSION=0.0.0
-ARG BUILD_PATH=.
-
-RUN echo "Version: ${VERSION}" 
-RUN echo "BuildPath: ${BUILD_PATH}"
+ARG VERSION=dev
+ARG VERSION_PATH="github.com/catalystgo/protosync/internal/build.Version"
 
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
-RUN go build -o bin/protosync -ldflags "-X ${BUILD_PATH}.Version=${VERSION}" main.go 
+RUN go build -o bin/protosync -ldflags "-X '${VERSION_PATH}=${VERSION}'" main.go
 
 FROM alpine:3.20.0 AS final
 

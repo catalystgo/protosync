@@ -2,6 +2,7 @@ package build
 
 import (
 	"runtime/debug"
+	"strings"
 )
 
 var (
@@ -9,7 +10,7 @@ var (
 )
 
 func init() {
-	if Version == "DEV" {
+	if strings.ToLower(Version) == "dev" {
 		info, ok := debug.ReadBuildInfo()
 		if ok && info.Main.Version != "" {
 			Version = info.Main.Version
