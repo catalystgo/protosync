@@ -7,12 +7,12 @@ import (
 )
 
 type Bitbucket struct {
-	client httpClient
+	client client
 }
 
-func NewBitbucket(httpClient httpClient) *Bitbucket {
+func NewBitbucket(client client) *Bitbucket {
 	return &Bitbucket{
-		client: httpClient,
+		client: client,
 	}
 }
 

@@ -7,12 +7,12 @@ import (
 )
 
 type Gitlab struct {
-	client httpClient
+	client client
 }
 
-func NewGitlab(httpClient httpClient) *Gitlab {
+func NewGitlab(client client) *Gitlab {
 	return &Gitlab{
-		client: httpClient,
+		client: client,
 	}
 }
 

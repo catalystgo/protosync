@@ -7,12 +7,12 @@ import (
 )
 
 type Github struct {
-	client httpClient
+	client client
 }
 
-func NewGithub(httpClient httpClient) *Github {
+func NewGithub(client client) *Github {
 	return &Github{
-		client: httpClient,
+		client: client,
 	}
 }
 
@@ -20,7 +20,6 @@ func (g *Github) GetFile(f *domain.File) ([]byte, error) {
 	return getFile(g.client, g.getURL(f), f)
 }
 
-// getURL returns the URL for the file
 func (g *Github) getURL(f *domain.File) string {
 	return fmt.Sprintf("https://%s/%s/%s/blob/%s/%s?raw=true",
 		f.Domain, f.User, f.Repo, f.Ref, f.Path,

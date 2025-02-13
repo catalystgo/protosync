@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"context"
+
 	log "github.com/catalystgo/logger/cli"
 	"github.com/catalystgo/protosync/internal/config"
 	"github.com/catalystgo/protosync/internal/domain"
@@ -11,14 +13,15 @@ import (
 )
 
 var (
-	cfg *config.Config
+	ctx = context.Background()
 
+	cfg        *config.Config
 	configPath string
 	verbose    bool
 )
 
 var (
-	httpClient = http.NewClient()
+	httpClient = http.NewClient(ctx)
 
 	// Downloaders
 
@@ -26,13 +29,9 @@ var (
 	gitlabClient    = downloader.NewGitlab(httpClient)
 	bitbucketClient = downloader.NewBitbucket(httpClient)
 
-	// Writer
-
-	writer = service.NewWriteProvider()
-
 	// Services
 
-	svc = service.New(writer)
+	svc = service.New()
 )
 
 var (

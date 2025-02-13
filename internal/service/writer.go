@@ -7,15 +7,13 @@ import (
 	log "github.com/catalystgo/logger/cli"
 )
 
-type (
-	WriteProvider struct{}
-)
+type writer struct{}
 
-func NewWriteProvider() *WriteProvider {
-	return &WriteProvider{}
+func newWriter() *writer {
+	return &writer{}
 }
 
-func (p *WriteProvider) Write(file string, content []byte, overide bool) error {
+func (p *writer) Write(file string, content []byte, overide bool) error {
 	// Create the directory if it doesn't exist
 	err := os.MkdirAll(path.Dir(file), os.ModePerm)
 	if err != nil {

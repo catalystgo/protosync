@@ -2,6 +2,7 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,13 +11,12 @@ import (
 )
 
 type Client struct {
+	ctx    context.Context
 	client *http.Client
 }
 
-func NewClient() *Client {
-	return &Client{
-		client: &http.Client{},
-	}
+func NewClient(ctx context.Context) *Client {
+	return &Client{ctx: ctx, client: &http.Client{}}
 }
 
 // Post sends a POST request to the given URL with the given body.
@@ -30,25 +30,9 @@ func (c *Client) Post(url string, body []byte, opts ...func(*http.Request)) ([]b
 		opt(req)
 	}
 
-	log.Debugf("POST request: %s", url)
+	log.Debugf("POST: %s", url)
 
-	resp, err := c.client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
-	}
-
-	body, err = io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	return body, nil
+	return c.do(req.WithContext(c.ctx))
 }
 
 func (c *Client) Get(url string, opts ...func(*http.Request)) ([]byte, error) {
@@ -61,8 +45,12 @@ func (c *Client) Get(url string, opts ...func(*http.Request)) ([]byte, error) {
 		opt(req)
 	}
 
-	log.Debugf("GET request: %s", url)
+	log.Debugf("GET: %s", url)
 
+	return c.do(req.WithContext(c.ctx))
+}
+
+func (c *Client) do(req *http.Request) ([]byte, error) {
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return nil, err
@@ -71,7 +59,7 @@ func (c *Client) Get(url string, opts ...func(*http.Request)) ([]byte, error) {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("got status code: %d", resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)

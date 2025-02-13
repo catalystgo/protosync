@@ -21,7 +21,7 @@ func TestProviderWrite(t *testing.T) {
 	content := []byte("test")
 
 	// Create a new writer
-	p := NewWriteProvider()
+	p := newWriter()
 
 	// Write the content to the file
 	err := p.Write(file, content, true)

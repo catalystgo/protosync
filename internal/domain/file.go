@@ -24,7 +24,7 @@ type File struct {
 func ParseFile(file string) (*File, error) {
 	log.Debugf("parsing file link: %s", file)
 
-	// Get the files's domain
+	// Get the file's domain
 	slashIdx := strings.Index(file, "/")
 	if slashIdx == -1 {
 		return nil, ErrInvalidFile(file, "missing domain")
@@ -36,7 +36,7 @@ func ParseFile(file string) (*File, error) {
 		return nil, ErrInvalidFile(file, "domain is empty")
 	}
 
-	// Get the files's ref
+	// Get the file's ref
 	atIdx := strings.Index(file, "@")
 	if atIdx == -1 {
 		return nil, ErrInvalidFile(file, "missing ref")
@@ -48,7 +48,7 @@ func ParseFile(file string) (*File, error) {
 		return nil, ErrInvalidFile(file, "ref is empty")
 	}
 
-	// Get the files's path
+	// Get the file's path
 	// Example:
 	// - github.com/catalystgo/protosync/internal/domain/file.go => internal/domain/file.go
 	// - gitlab.com/catalystgo/protosync/internal/domain/file.go => internal/domain/file.go
@@ -71,11 +71,9 @@ func ParseFile(file string) (*File, error) {
 	if user == "" {
 		return nil, ErrInvalidFile(file, "user is empty")
 	}
-
 	if repo == "" {
 		return nil, ErrInvalidFile(file, "repo is empty")
 	}
-
 	if !strings.HasSuffix(path, ".proto") {
 		return nil, ErrInvalidFile(file, "only .proto extension is allowed")
 	}

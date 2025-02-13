@@ -20,20 +20,20 @@ docker pull catalystgo/protosync:latest
 
 ### Commands 📜
 
-| Command | Description |
-| --- | --- |
-| `init` | Initialize the configuration file |
-| `vendor` | Sync the proto files from the remote repositories to the local directory |
-| `version` | Print the version of the tool |
-| `validate` | Validate the existing configuration file |
-| `help` | Print the help message |
+| Command    | Description                                                              |
+|------------|--------------------------------------------------------------------------|
+| `init`     | Initialize the configuration file                                        |
+| `vendor`   | Sync the proto files from the remote repositories to the local directory |
+| `version`  | Print the version of the tool                                            |
+| `validate` | Validate the existing configuration file                                 |
+| `help`     | Print the help message                                                   |
 
 ### Global Options 🛠
 
-| Option | Short | Description |
-| --- | --- | --- |
-| `--file` | `-f` | Path to the configuration file |
-| `--verbose` | `-v` | Enable verbose mode for debugging |
+| Option      | Short | Description                       |
+|-------------|-------|-----------------------------------|
+| `--file`    | `-f`  | Path to the configuration file    |
+| `--verbose` | `-v`  | Enable verbose mode for debugging |
 
 ### Configuration File 📄
 
@@ -152,7 +152,6 @@ docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosy
 - [ ] Add goreleaser to the project
 - [ ] Add build and release pipeline (docker/goreleaser), each deploy should create a new release with tag and latest release
 - [ ] Add method/way to use auth tokens for private repos
-- [x] Add the path option in config to download the files in a specific path under outDir
 
 ### Fixes 🛠
 

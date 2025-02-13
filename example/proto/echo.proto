@@ -2,20 +2,16 @@ syntax = "proto3";
 
 package echo;
 
-option go_package = "github.com/catalystgo/protosync/examples/api/echo-server";
+option go_package = "github.com/catalystgo/protosync/examples/api/echo-service";
 
-// The service definition
 service EchoService {
-  // Echo the message back
   rpc Echo(EchoRequest) returns (EchoResponse);
 }
 
-// The request message containing the user's name
 message EchoRequest {
   string message = 1;
 }
 
-// The response message containing the greetings
 message EchoResponse {
   string message = 1;
 }

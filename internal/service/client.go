@@ -33,9 +33,9 @@ type Service struct {
 	downloaders map[string]Downloader
 }
 
-func New(writer Writer) *Service {
+func New() *Service {
 	return &Service{
-		writer:      writer,
+		writer:      newWriter(),
 		downloaders: make(map[string]Downloader),
 	}
 }
