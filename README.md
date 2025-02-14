@@ -147,12 +147,7 @@ docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosy
 
 ## Milestones 🎯
 
-### Features 🚀
+### Features / Fixes
 
-- [ ] Add goreleaser to the project
-- [ ] Add build and release pipeline (docker/goreleaser), each deploy should create a new release with tag and latest release
-- [ ] Add method/way to use auth tokens for private repos
-
-### Fixes 🛠
-
-- [ ] If the URL redirects to another *NON* proto file then the tool should not download the file, for example redirecting to a HTML page
+- [ ] Add method/way to use auth tokens for private repositories
+- [ ] If the URL redirects to another NON-proto file then the tool shouldn't download the file
