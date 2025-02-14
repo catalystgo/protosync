@@ -1,6 +1,6 @@
 FROM golang:alpine3.20 AS builder
 
-ARG VERSION=dev
+ARG VERSION=${VERSION:-dev}
 ARG VERSION_PATH="github.com/catalystgo/protosync/internal/build.Version"
 
 WORKDIR /app

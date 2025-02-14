@@ -64,7 +64,6 @@ tasks:
     cmds:
       - docker build -t {{.DOCKER_IMAGE}}:{{.VERSION}} . 
         --build-arg VERSION={{.VERSION}}
-        --build-arg BUILD_PATH=$(go list -m)/internal/build
         --no-cache
 
   docker-push:
