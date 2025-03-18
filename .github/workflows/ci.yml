@@ -49,6 +49,11 @@ jobs:
       - name: run_tests
         run: task test
 
+      - name: upload_coverage_reports_to_codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   docker:
     if: github.ref == 'refs/heads/main'
     needs: [ lint, test ]

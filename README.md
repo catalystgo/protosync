@@ -1,5 +1,14 @@
 # protosync 🗃
 
+[![wakatime](https://wakatime.com/badge/user/965e81db-2a88-4564-b236-537c4a901130/project/4cfc2a67-bfe6-432b-a9b7-abf550e6be1c.svg)](https://wakatime.com/badge/user/965e81db-2a88-4564-b236-537c4a901130/project/4cfc2a67-bfe6-432b-a9b7-abf550e6be1c)
+![Build Status](https://github.com/catalystgo/protosync/actions/workflows/ci.yml/badge.svg)
+[![Go Report Card](https://goreportcard.com/badge/github.com/catalystgo/protosync)](https://goreportcard.com/report/github.com/catalystgo/protosync)
+[![codecov](https://codecov.io/gh/catalystgo/protosync/graph/badge.svg?token=KN3G1NL58M)](https://codecov.io/gh/catalystgo/protosync)
+
+[![GitHub issues](https://img.shields.io/github/issues/catalystgo/protosync.svg)](https://github.com/catalystgo/protosync/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/catalystgo/protosync.svg)](https://github.com/catalystgo/protosync/pulls)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 A simple tool to sync the proto files from a remote repository to a local directory.
 
 ## Installation 🏗
@@ -145,9 +154,11 @@ Using Docker
 docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosync.yml --output /app
 ```
 
-## Milestones 🎯
-
-### Features / Fixes
+## Features 🎯
 
 - [ ] Add method/way to use auth tokens for private repositories
 - [ ] If the URL redirects to another NON-proto file then the tool shouldn't download the file
+
+## Contributing 🤝
+
+![Alt](https://repobeats.axiom.co/api/embed/23ace50717472cac22b89f29a050818bbf9f793d.svg "Repobeats analytics image")

@@ -30,7 +30,7 @@ tasks:
   test:
     desc: "Run all tests and generate coverage report (excludes some packages)"
     cmds:
-      - go test -cover -json -coverprofile=coverage.out 
+      - go test -cover -json -coverprofile=coverage.txt 
         $(go list ./... | grep -Ewv "(mock$|cmd$)") | {{.GOBIN}}/gotestfmt
 
   lint:
