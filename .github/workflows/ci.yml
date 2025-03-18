@@ -53,6 +53,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          slug: catalystgo/protosync
 
   docker:
     if: github.ref == 'refs/heads/main'
