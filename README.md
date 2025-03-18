@@ -142,7 +142,7 @@ protosync vendor --file ./protosync.yml --output /tmp
 Using Docker
 
 ```bash
-docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosync.yml --ouput /app
+docker run -v $(pwd):/app catalystgo/protosync:latest vendor --file /app/protosync.yml --output /app
 ```
 
 ## Milestones 🎯

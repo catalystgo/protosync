@@ -21,7 +21,7 @@ type (
 	}
 
 	Config struct {
-		absOutDir string // absolute path of the output directory
+		AbsOutDir string // absolute path of the output directory
 
 		Directory    string        `yaml:"directory" json:"directory"`
 		Dependencies []*Dependency `yaml:"dependencies" json:"dependencies"`
@@ -73,5 +73,5 @@ func completeConfig(configPath string, outputDir string) {
 	}
 
 	// Set absolute path
-	cfg.absOutDir = path.Join(outputDir, cfg.Directory)
+	cfg.AbsOutDir = path.Join(outputDir, cfg.Directory)
 }

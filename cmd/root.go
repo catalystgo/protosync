@@ -62,6 +62,7 @@ var (
 
 			log.Debug("config loaded")
 			log.Debugf("config output directory: %s", c.Directory)
+			log.Debugf("config abs output directory: %s", c.AbsOutDir)
 
 			cfg = c // set config to global variable
 

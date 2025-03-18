@@ -18,7 +18,7 @@ var (
 		Run: func(_ *cobra.Command, _ []string) {
 			for _, d := range cfg.Dependencies {
 				for _, f := range d.Sources {
-					if err := svc.Download(f, cfg.Directory, d.Path); err != nil {
+					if err := svc.Download(f, cfg.AbsOutDir, d.Path); err != nil {
 						log.Errorf("download %s => %v", f, err)
 					}
 				}

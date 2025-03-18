@@ -32,7 +32,7 @@ func validate() error {
 }
 
 // validateDomain validates the domain api, it checks:
-// - Domain is has an allowed API
+// - Domain is having an allowed API
 // - Domain is not duplicated
 func validateDomain(domains []*Domain, m map[string]struct{}) error {
 	for _, d := range domains {
@@ -59,9 +59,9 @@ func validateDomain(domains []*Domain, m map[string]struct{}) error {
 func validateDependencies(configDomains map[string]struct{}) error {
 	for idx, dep := range cfg.Dependencies {
 		// Check path is under the out_dir
-		fileOutputPath := path.Clean(path.Join(cfg.absOutDir, dep.Path))
-		if !strings.HasPrefix(fileOutputPath, cfg.absOutDir) {
-			return ErrPathNotUnderOutDir(idx, dep.Path, cfg.absOutDir)
+		fileOutputPath := path.Clean(path.Join(cfg.AbsOutDir, dep.Path))
+		if !strings.HasPrefix(fileOutputPath, cfg.AbsOutDir) {
+			return ErrPathNotUnderOutDir(idx, dep.Path, cfg.AbsOutDir)
 		}
 
 		// Check if source and sources are set at the same time
