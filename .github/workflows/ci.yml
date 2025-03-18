@@ -1,4 +1,4 @@
-name: ci_pipeline
+name: ci
 
 on:
   push:
@@ -26,7 +26,6 @@ jobs:
           task deps
         shell: bash
 
-
       - name: run_linter
         run: task lint
 
@@ -47,37 +46,8 @@ jobs:
           task deps
         shell: bash
 
-
       - name: run_tests
         run: task test
-
-  gorelease:
-    if: github.ref == 'refs/heads/main'
-    needs: [ lint, test ]
-    runs-on: ubuntu-latest
-    steps:
-      - name: checkout_code
-        uses: actions/checkout@v2
-
-      - name: setup_go
-        uses: actions/setup-go@v3
-        with:
-          go-version: 1.23
-
-      - name: go_releaser
-        uses: goreleaser/goreleaser-action@v6
-        with:
-          distribution: goreleaser
-          version: '~> v2'
-          args: release --clean --snapshot
-        env:
-          GITHUB_TOKEN: ${{ secrets.GO_RELEASE_TOKEN }}
-
-      - name: upload_artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: gorelease-output
-          path: dist/
 
   docker:
     if: github.ref == 'refs/heads/main'
@@ -102,6 +72,6 @@ jobs:
           context: .
           push: true
           tags: |
-            catalystgo/protosync:${{ github.ref_name != 'main' && github.ref_name || 'latest' }}
+            catalystgo/protosync:latest
           build-args: |
-            VERSION: ${{ github.ref_name != 'main' && github.ref_name || 'latest' }}
+            VERSION: latest
