@@ -17,7 +17,7 @@ func TestService(t *testing.T) {
 	t.Parallel()
 
 	var (
-		defaulContent  = []byte(`hello world`)
+		defaultContent = []byte(`hello world`)
 		defaultOutDir  = "proto"
 		defaultFileURL = "github.com/catalystgo/protosync/proto/hello.proto@559bac64"
 		defaultFile    = &domain.File{
@@ -44,10 +44,10 @@ func TestService(t *testing.T) {
 			name:    "success",
 			file:    defaultFileURL,
 			ourDir:  defaultOutDir,
-			content: defaulContent,
+			content: defaultContent,
 			prepare: func(w *mock.MockWriter, d *mock.MockDownloader) {
-				w.EXPECT().Write("proto/github.com/catalystgo/protosync/proto/hello.proto", defaulContent, true).Return(nil)
-				d.EXPECT().GetFile(defaultFile).Return(defaulContent, nil)
+				w.EXPECT().Write("proto/github.com/catalystgo/protosync/proto/hello.proto", defaultContent, true).Return(nil)
+				d.EXPECT().GetFile(defaultFile).Return(defaultContent, nil)
 			},
 			check: func(t *testing.T, err error) {
 				require.NoError(t, err)
@@ -57,7 +57,7 @@ func TestService(t *testing.T) {
 			name:    "download error",
 			file:    defaultFileURL,
 			ourDir:  defaultOutDir,
-			content: defaulContent,
+			content: defaultContent,
 			prepare: func(_ *mock.MockWriter, d *mock.MockDownloader) {
 				d.EXPECT().GetFile(defaultFile).Return(nil, errDummy)
 			},
@@ -69,10 +69,10 @@ func TestService(t *testing.T) {
 			name:    "write error",
 			file:    defaultFileURL,
 			ourDir:  defaultOutDir,
-			content: defaulContent,
+			content: defaultContent,
 			prepare: func(w *mock.MockWriter, d *mock.MockDownloader) {
-				w.EXPECT().Write("proto/github.com/catalystgo/protosync/proto/hello.proto", defaulContent, true).Return(errDummy)
-				d.EXPECT().GetFile(defaultFile).Return(defaulContent, nil)
+				w.EXPECT().Write("proto/github.com/catalystgo/protosync/proto/hello.proto", defaultContent, true).Return(errDummy)
+				d.EXPECT().GetFile(defaultFile).Return(defaultContent, nil)
 			},
 			check: func(t *testing.T, err error) {
 				require.ErrorIs(t, err, errDummy)
@@ -82,7 +82,7 @@ func TestService(t *testing.T) {
 			name:    "invalid file",
 			file:    "gitlab.com/catalystgo/protosync/proto/hello@559bac64",
 			ourDir:  defaultOutDir,
-			content: defaulContent,
+			content: defaultContent,
 			check: func(t *testing.T, err error) {
 				require.Error(t, err)
 			},
@@ -91,7 +91,7 @@ func TestService(t *testing.T) {
 			name:    "unknown domain",
 			file:    "unknown.com/catalystgo/protosync/proto/hello.proto@559bac64",
 			ourDir:  defaultOutDir,
-			content: defaulContent,
+			content: defaultContent,
 			check: func(t *testing.T, err error) {
 				require.Error(t, err)
 			},
@@ -175,7 +175,6 @@ func TestServiceGetConfig(t *testing.T) {
 			writer := mock.NewMockWriter(ctrl)
 
 			s := New()
-			s.writer = writer
 
 			tc.prepare(writer, tc.file)
 

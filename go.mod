@@ -1,10 +1,11 @@
 module github.com/catalystgo/protosync
 
-go 1.23
+go 1.24.0
 
 require (
 	github.com/brianvoe/gofakeit/v6 v6.28.0
-	github.com/catalystgo/logger v0.1.0
+	github.com/catalystgo/helpers v0.0.2
+	github.com/catalystgo/logger v0.1.2
 	github.com/golang/mock v1.6.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0

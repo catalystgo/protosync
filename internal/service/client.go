@@ -6,6 +6,7 @@ import (
 	"path"
 	"sync"
 
+	"github.com/catalystgo/helpers"
 	"github.com/catalystgo/protosync/internal/domain"
 )
 
@@ -13,31 +14,20 @@ var (
 	ErrInvalidFile = func(file string, message string) error {
 		return fmt.Errorf("invalid file format: %s => %s", file, message)
 	}
-	ErrInvalidOutput = func(output string) error {
-		return fmt.Errorf("invalid output type: %s", output)
-	}
 )
 
 type Downloader interface {
 	GetFile(file *domain.File) ([]byte, error)
 }
 
-type Writer interface {
-	Write(file string, content []byte, overide bool) error
-}
-
 type Service struct {
 	mu sync.RWMutex
 
-	writer      Writer
 	downloaders map[string]Downloader
 }
 
 func New() *Service {
-	return &Service{
-		writer:      newWriter(),
-		downloaders: make(map[string]Downloader),
-	}
+	return &Service{downloaders: make(map[string]Downloader)}
 }
 
 func (s *Service) Register(domain string, d Downloader) {
@@ -87,7 +77,7 @@ func (s *Service) Download(file string, outDirectory string, outPath string) err
 
 	// Write file content
 
-	err = s.writer.Write(outPath, content, true)
+	err = helpers.SaveFile(outPath, content, &helpers.SaveFileOpt{Override: true})
 	if err != nil {
 		return err
 	}
@@ -109,5 +99,5 @@ func (s *Service) GenConfig(configFile string) error {
 	if configFile == "" {
 		configFile = configPath
 	}
-	return s.writer.Write(configFile, []byte(configContent), false)
+	return helpers.SaveFile(configFile, []byte(configContent), &helpers.SaveFileOpt{Override: false})
 }

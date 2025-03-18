@@ -1,6 +1,7 @@
 package config
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/catalystgo/protosync/internal/domain"
@@ -19,11 +20,12 @@ var (
 	}
 
 	// Source errors
+
 	ErrSourceInvalid = func(idx int, source string, err error) error {
 		return fmt.Errorf(dependencyInvalid(idx).Error()+"source: %s is invalid => %v", source, err)
 	}
 	ErrSourceAndSourcesSet = func(idx int) error {
-		return fmt.Errorf(dependencyInvalid(idx).Error() + "source and sources cannot be set at the same time in dependency")
+		return errors.New(dependencyInvalid(idx).Error() + "source and sources cannot be set at the same time in dependency")
 	}
 	ErrSourceUnregisteredDomain = func(source string, domain string) error {
 		return fmt.Errorf("unregistered domain: %s for source: %s", domain, source)

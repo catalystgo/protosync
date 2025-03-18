@@ -18,7 +18,7 @@ jobs:
       - name: setup_go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.23
+          go-version: 1.24
 
       - name: install_dependencies
         run: |
@@ -38,7 +38,7 @@ jobs:
       - name: setup_go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.23
+          go-version: 1.24
 
       - name: install_dependencies
         run: |
@@ -74,4 +74,4 @@ jobs:
           tags: |
             catalystgo/protosync:latest
           build-args: |
-            VERSION: latest
+            VERSION=latest
